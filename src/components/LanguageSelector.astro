@@ -1,0 +1,53 @@
+---
+import { languages } from '../i18n/ui';
+import { getLangFromUrl, getRouteFromUrl, useTranslatedPath } from '../i18n/utils';
+
+
+//const isProduction = import.meta.env.PROD;
+//const isDev = import.meta.env.DEV;
+
+
+// Obtener el idioma actual de la URL
+const lang = getLangFromUrl(Astro.url);
+// Obtener la ruta actual basada en el idioma
+const route = getRouteFromUrl(Astro.url);
+// Inicializar la función para traducir rutas
+const translatePath = useTranslatedPath(lang);
+
+/* let isBlogOrRed = (Astro.url.pathname.split('/').slice(2, 3).join('/') == "blog") ? 'blog/' : ((Astro.url.pathname.split('/').slice(2, 3).join('/') == "red") ? 'red/' : undefined); */
+
+// Aquí puedes decidir cómo manejar 'blog' o 'red' según tu lógica.
+/* let isBlogOrRed = (Astro.url.pathname.split('/')[2] === "blog") ? 'blog/' : ((Astro.url.pathname.split('/')[2] === "red") ? 'red/' : undefined); */
+
+---
+
+
+<div class="relative inline-block text-left w-full">
+    <div class="group">
+        <button type="button"
+            class="inline-flex justify-left items-left w-full px-4 py-2 font-medium text-gray-600 lg:text-white focus:outline-none">
+            {lang}
+            <!-- Dropdown arrow -->
+            <svg class="w-4 h-4 ml-2 -mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 12l-5-5h10l-5 5z" />
+            </svg>
+        </button>
+
+        <!-- Dropdown menu -->
+        <div class="bg-white divide-y divide-gray-100 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300">
+            <div class="py-1">
+                <ul>
+                    {Object.entries(languages).map(([lang, label]) => (
+                            <li>
+                                <a
+                                id="cambiaContenido"
+                                href={(Astro.url.pathname == "/es/" || Astro.url.pathname == "/en/" || Astro.url.pathname == "/pt/")? '/'+lang+'/' : translatePath(`/${route !== undefined ? route : Astro.url.pathname.split('/').slice(3).join('/')}`, lang)}
+                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{label}
+                                </a>
+                            </li>
+                    ))}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

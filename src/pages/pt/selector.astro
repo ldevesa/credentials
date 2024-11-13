@@ -1,0 +1,69 @@
+---
+import Layout from "../../layouts/InicioLayout.astro";
+import CrossFadeBack from "../../components/CrossFadeBack.astro";
+
+import { Image } from 'astro:assets';
+import logoLatcom from '../../images/logo/logo-latcom.svg';
+---
+
+<Layout title="Selector">
+  <main class="flex flex-col min-h-screen">
+    <!-- Primera Sección (100% ancho) -->
+    <section
+      class="text-white h-24 flex items-center justify-center"
+    >
+      <div class="max-w-[300px] mx-auto">
+        <a class="text-2xl font-bold" href="/credentials/">
+          <Image src={logoLatcom} alt='' />
+        </a>
+      </div>
+    </section>
+
+    <!-- Sección de dos columnas (50% cada una) -->
+    <section class="flex flex-1 flex-wrap">
+      <!-- Columna izquierda (50%) -->
+      <div
+        class="text-white w-full md:w-1/2 flex flex-col items-center justify-center space-y-4"
+      >
+        <h2 class="text-3xl font-semibold">Corporate Presentation</h2>
+        <ul class="space-y-2 text-center">
+          <li><a href="/credentials/en/about-us">English</a></li>
+          <li><a href="/credentials/es/nosotros">Español</a></li>
+          <li><a href="/credentials/pt/nos">Português</a></li>
+        </ul>
+      </div>
+
+      <!-- Columna derecha (50%) -->
+      <div
+        class="text-white w-full md:w-1/2 flex flex-col items-center justify-center space-y-4"
+      >
+        <h2 class="text-3xl font-semibold">Out Of Home Presentation</h2>
+        <ul class="space-y-2 text-center">
+          <li>English</li>
+          <li>Español</li>
+          <li>Português</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Última Sección (100% ancho) -->
+    <section
+      class="text-white h-24 flex items-center justify-center"
+    >
+      <h2 class="text-3xl font-bold">WE ARE GLOBAL OUT OF HOME</h2>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- Crossfade Images Background -->
+    <!-- ============================================================== -->
+    <CrossFadeBack />
+
+  </main>
+</Layout>
+
+<style>
+  main {
+    color: white;
+    font-size: 20px;
+  }
+</style>

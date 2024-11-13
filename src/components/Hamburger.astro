@@ -1,0 +1,110 @@
+---
+
+---
+
+<!-- Boton menu hamburguesa - usa Alpine.js-->
+<div class="lg:hidden">
+    <nav x-data="{ open: false }" @toggle-sidebar.window="open = !$event.detail.open">
+        <button class="w-10 h-10 relative focus:outline-none bg-cyan-600 rounded" @click="open = !open" id="open-sidebar">
+            <div class="block w-5 absolute left-4 top-1/2 transform  -translate-x-1/2 -translate-y-1/2">
+                <span  class="block absolute h-0.5 w-7 text-white bg-current transform transition duration-500 ease-in-out" :class="{'rotate-45': open,' -translate-y-1.5': !open }"></span>
+                <span  class="block absolute  h-0.5 w-5 text-white bg-current   transform transition duration-500 ease-in-out" :class="{'opacity-0': open } "></span>
+                <span  class="block absolute  h-0.5 w-7 text-white bg-current transform  transition duration-500 ease-in-out" :class="{'-rotate-45': open, ' translate-y-1.5': !open}"></span>
+            </div>
+        </button>
+    </nav>
+</div>
+
+<script>
+/* function setupSidebar() {
+    // Mi script en el header
+    const sidebar: any = document.getElementById('sidebar');
+    const openSidebarButton: any = document.getElementById('open-sidebar');
+
+    // Verifica si los elementos existen antes de proceder
+    if (!sidebar || !openSidebarButton) {
+        console.warn('El elemento sidebar o open-sidebar no está presente en el DOM.');
+        return;
+    }
+
+    openSidebarButton.addEventListener('click', (event: any) => {
+        event.stopPropagation();
+        sidebar.classList.toggle('-translate-x-full');
+    });
+
+    //console.log('Verificando funcionamiento del script en header')
+
+    // Función para cerrar la barra lateral si se hace clic fuera de ella
+    function closeSidebarOnClickOutside(event: any) {
+        // Obtener la referencia al elemento HTML con Alpine.js
+        const nav = document.querySelector('[x-data]');
+        // Verificar si el clic no ocurrió en la barra lateral ni en el botón de abrir la barra lateral
+        if (!nav || (!nav.contains(event.target) && !openSidebarButton.contains(event.target)) && (!sidebar.contains(event.target) && !openSidebarButton.contains(event.target))) {
+            // Ocultar la barra lateral aplicando una clase de CSS
+            sidebar.classList.add('-translate-x-full');
+            // Disparar un evento para cambiar el estado en Alpine.js
+            window.dispatchEvent(new CustomEvent('toggle-sidebar', { detail: { open: true } }));
+        }
+    }
+
+    // Agregar event listener para el clic en todo el documento
+    document.addEventListener('click', closeSidebarOnClickOutside);
+
+} */
+
+// Ejecutar la función setupSidebar() cada vez que ocurre una transición de página
+/* document.addEventListener('astro:page-load', () => {
+    setupSidebar();
+}); */
+
+
+function setupHamburgerMenu() {
+  // Selecciona el botón del menú hamburguesa y el contenedor del menú lateral
+  const menuButton = document.getElementById('open-sidebar');
+  const sidebar = document.getElementById('sidebar');
+
+  // Si el elemento no está presente, muestra un mensaje de advertencia y detiene la ejecución
+  if (!menuButton || !sidebar) {
+    console.warn('El elemento sidebar o open-sidebar no está presente en el DOM.');
+    return;
+  }
+
+  // Verifica si ya existe un listener para evitar duplicados
+  if (!menuButton.hasAttribute('data-initialized')) {
+    // Agrega un evento para alternar la clase que abre/cierra el menú
+    menuButton.addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+    });
+    // Marca el botón como inicializado para evitar duplicar listeners
+    menuButton.setAttribute('data-initialized', 'true');
+  }
+}
+
+// Inicializa el menú al cargar la página
+document.addEventListener('DOMContentLoaded', setupHamburgerMenu);
+
+// Si estás usando Astro, maneja las transiciones de página con `astro:page-load`
+document.addEventListener('astro:page-load', setupHamburgerMenu);
+
+// Configura un `MutationObserver` para detectar cambios en el DOM y re-inicializar si es necesario
+const targetNode = document.body;
+
+const observer = new MutationObserver((mutations) => {
+  for (const mutation of mutations) {
+    // Comprueba si se han agregado o cambiado nodos y reinicializa el menú
+    if (mutation.type === 'childList' || mutation.type === 'attributes') {
+      setupHamburgerMenu();
+    }
+  }
+});
+
+const config = {
+  childList: true, // Observa cambios en los hijos directos
+  subtree: true,   // Observa todo el subárbol
+};
+
+// Inicia la observación
+observer.observe(targetNode, config);
+
+
+</script>
