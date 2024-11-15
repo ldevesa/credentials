@@ -13,14 +13,27 @@ import Hamburger from './Hamburger.astro';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
+console.log('translatePath', translatePath('/'));
 
 let currentPath = Astro.url.pathname;
-//console.log('currentPath', currentPath);
+console.log('currentPath', currentPath);
 
-//const pathname = new URL(Astro.request.url).pathname;
-//console.log('pathname', pathname);
+const pathname = new URL(Astro.request.url).pathname;
+console.log('pathname', pathname);
 
+// Normaliza currentPath eliminando barras finales y asegurando que tiene la misma estructura que los href generados por translatePath
+if (currentPath.endsWith('/')) {
+  currentPath = currentPath.slice(0, -1); // Remueve la barra final si existe
+}
+console.log('currentPath normalizado:', currentPath);
 
+// Función para verificar si la ruta es activa
+function isActive(path: string) {
+  const translatedPath = translatePath(path);
+  // Normaliza el path traducido
+  const normalizedPath = translatedPath.endsWith('/') ? translatedPath.slice(0, -1) : translatedPath;
+  return currentPath === normalizedPath;
+}
 ---
 
 
@@ -36,40 +49,40 @@ let currentPath = Astro.url.pathname;
     <ul 
         class="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6">
 
-        <li id={currentPath === translatePath('/') ? 'active' : ''} data-nav={t('nav.inicio')}>
+        <li class={isActive('/') ? 'active' : ''} data-nav={t('nav.inicio')}>
             <a href={translatePath('/')}
                 class="block py-2 pl-3 pr-4 lg:p-0 text-gray-700"
                 aria-current="page">{t('nav.inicio')}</a>
         </li>
-        <li id={currentPath === translatePath('/nosotros') ? 'active' : ''}>
+        <li class={isActive('/nosotros') ? 'active' : ''}>
             <a href={translatePath('/nosotros')}
                 class="flex items-center py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-cyan-700 lg:p-0">{t('nav.nosotros')}</a>
         </li>
-        <li id={currentPath === translatePath('/clientes') ? 'active' : ''}>
+        <li class={isActive('/clientes') ? 'active' : ''}>
             <a href={translatePath('/clientes')}
                 class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-cyan-700 lg:p-0 ">{t('nav.clientes')}</a>
         </li>
-        <li id={currentPath === translatePath('/categorias') ? 'active' : ''}>
+        <li class={isActive('/categorias') ? 'active' : ''}>
             <a href={translatePath('/categorias')}
                 class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-cyan-700 lg:p-0 ">{t('nav.categorias')}</a>
         </li>
-        <li id={currentPath === translatePath('/servicios') ? 'active' : ''}>
+        <li class={isActive('/servicios') ? 'active' : ''}>
             <a href={translatePath('/servicios')}
                 class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-cyan-700 lg:p-0 ">{t('nav.servicios')}</a>
         </li>
-        <li id={currentPath === translatePath('/cobertura') ? 'active' : ''}>
+        <li class={isActive('/cobertura') ? 'active' : ''}>
             <a href={translatePath('/cobertura')}
                 class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-cyan-700 lg:p-0 ">{t('nav.cobertura')}</a>
         </li>
-        <li id={currentPath === translatePath('/casos') ? 'active' : ''}>
+        <li class={isActive('/casos') ? 'active' : ''}>
             <a href={translatePath('/casos')}
                 class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-cyan-700 lg:p-0 ">{t('nav.casos')}</a>
         </li>
-        <li id={currentPath === translatePath('/especiales') ? 'active' : ''}>
+        <li class={isActive('/especiales') ? 'active' : ''}>
             <a href={translatePath('/especiales')}
                 class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-cyan-700 lg:p-0 ">{t('nav.especiales')}</a>
         </li>
-        <!-- <li class="group" id={currentPath === translatePath('/nosotros') ? 'active' : ''}>
+        <!-- <li class="group" class={isActive('/nosotros') ? 'active' : ''}>
             <a href={translatePath('/nosotros')}
                 class="flex items-center py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-cyan-700 lg:p-0">{t('nav.nosotros')} <svg class="ml-2 w-3 h-3 text-gray-500 transition group-hover:rotate-90" xmlns="http://www.w3.org/2000/svg"
                 width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -79,11 +92,11 @@ let currentPath = Astro.url.pathname;
             </svg></a>
             <ul class="absolute origin-top-left bg-white divide-y divide-gray-100 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300">
                 <li class="p-2"
-                id={currentPath === translatePath('/red') ? 'active' : ''}>
+                id={isActive('/red') ? 'active' : ''}>
                     <a href={translatePath('/red')}>{t('nav.red')}</a>
                 </li>
                 <li class="p-2"
-                id={currentPath === translatePath('/blog') ? 'active' : ''}>
+                id={isActive('/blog') ? 'active' : ''}>
                     <a href={translatePath('/blog')}>{t('nav.blog')}</a>
                 </li>
             </ul>
@@ -122,13 +135,13 @@ let currentPath = Astro.url.pathname;
 
 
         <ul>
-            <li id={currentPath === translatePath('/') ? 'active' : ''}>
+            <li class={isActive('/') ? 'active' : ''}>
                 <a href={translatePath('/')}
                     class="block py-2 pl-3 pr-4 text-gray-700 rounded lg:bg-transparent lg:text-cyan-700 lg:p-0 "
                     aria-current="page">{t('nav.inicio')}</a>
             </li>
             <li class="block py-2 pl-3 pr-4 w-full text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-cyan-700 lg:p-0"
-            id={currentPath === translatePath('/nosotros') ? 'active' : ''}>
+            id={isActive('/nosotros') ? 'active' : ''}>
                 <details class="group">
                     <summary class="flex justify-between marker:content-none hover:cursor-pointer">
                         <a href={translatePath('/nosotros')}
@@ -137,27 +150,27 @@ let currentPath = Astro.url.pathname;
 
                 </details>
             </li>
-            <li id={currentPath === translatePath('/clientes') ? 'active' : ''}>
+            <li class={isActive('/clientes') ? 'active' : ''}>
                 <a href={translatePath('/clientes')}
                     class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-cyan-700 lg:p-0">{t('nav.clientes')}</a>
             </li>
-            <li id={currentPath === translatePath('/categorias') ? 'active' : ''}>
+            <li class={isActive('/categorias') ? 'active' : ''}>
                 <a href={translatePath('/categorias')}
                     class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-cyan-700 lg:p-0">{t('nav.categorias')}</a>
             </li>
-            <li id={currentPath === translatePath('/servicios') ? 'active' : ''}>
+            <li class={isActive('/servicios') ? 'active' : ''}>
                 <a href={translatePath('/servicios')}
                     class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-cyan-700 lg:p-0">{t('nav.servicios')}</a>
             </li>
-            <li id={currentPath === translatePath('/cobertura') ? 'active' : ''}>
+            <li class={isActive('/cobertura') ? 'active' : ''}>
                 <a href={translatePath('/cobertura')}
                     class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-cyan-700 lg:p-0 ">{t('nav.cobertura')}</a>
             </li>
-            <li id={currentPath === translatePath('/casos') ? 'active' : ''}>
+            <li class={isActive('/casos') ? 'active' : ''}>
                 <a href={translatePath('/casos')}
                     class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-cyan-700 lg:p-0 ">{t('nav.casos')}</a>
             </li>
-            <li id={currentPath === translatePath('/especiales') ? 'active' : ''}>
+            <li class={isActive('/especiales') ? 'active' : ''}>
                 <a href={translatePath('/especiales')}
                     class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-cyan-700 lg:p-0 ">{t('nav.especiales')}</a>
             </li>
@@ -167,7 +180,7 @@ let currentPath = Astro.url.pathname;
                 </div>
             </li>
 <!--             <li class="block py-2 pl-3 pr-4 w-full text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-cyan-700 lg:p-0"
-            id={currentPath === translatePath('/nosotros') ? 'active' : ''}>
+            class={isActive('/nosotros') ? 'active' : ''}>
                 <details class="group">
                     <summary class="flex justify-between marker:content-none hover:cursor-pointer">
                         <a href={translatePath('/nosotros')}
@@ -181,11 +194,11 @@ let currentPath = Astro.url.pathname;
                     </summary>
                     <ul class="py-2 pl-3 pr-4 bg-white divide-y divide-gray-100 rounded-md shadow-lg ">
                         <li class="p-2"
-                        id={currentPath === translatePath('/red') ? 'active' : ''}>
+                        id={isActive('/red') ? 'active' : ''}>
                             <a href={translatePath('/red')}>{t('nav.red')}</a>
                         </li>
                         <li class="p-2"
-                        id={currentPath === translatePath('/blog') ? 'active' : ''}>
+                        id={isActive('/blog') ? 'active' : ''}>
                             <a href={translatePath('/blog')}>{t('nav.blog')}</a>
                         </li>
                     </ul>
@@ -206,7 +219,7 @@ let currentPath = Astro.url.pathname;
 </div>
 
 <style>
-    #active, .active {
+    .active {
         border-bottom: 4px solid rgb(43, 192, 226);
     }
     nav.principal {
