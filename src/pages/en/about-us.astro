@@ -1,8 +1,28 @@
 ---
 import CorporateLayout from "../../layouts/CorporateLayout.astro";
-
 ---
 
 <CorporateLayout>
-    <h1>About Us</h1>
+  <div class="swipe-section">
+    <section class="panel red">
+        <h1>About Us</h1>
+    </section>
+    <section class="panel purple x-100">
+      Section 2
+    </section>
+    <section class="panel blue x-100">
+       Section 3
+    </section>
+    <section class="panel orange x-100">
+        Section 4
+    </section>
+  </div>
 </CorporateLayout>
+
+
+
+<script>
+    import { initSwipeSection } from "../../utils/gsapSwipeHorizontalScroll";
+    
+    initSwipeSection();
+</script>

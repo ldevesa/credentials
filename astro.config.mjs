@@ -4,6 +4,7 @@ import tailwind from '@astrojs/tailwind';
 import icon from 'astro-icon';
 import alpinejs from '@astrojs/alpinejs';
 
+
 // https://astro.build/config
 export default defineConfig({
   base: '/credentials/',
@@ -18,5 +19,5 @@ export default defineConfig({
       en: "es"
     }
   },
-  integrations: [tailwind(), icon(), alpinejs()]
+  integrations: [tailwind(), icon(), alpinejs()],
 });

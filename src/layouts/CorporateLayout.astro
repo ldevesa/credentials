@@ -13,19 +13,48 @@ const translations = getI18N(lang);
 
 <!DOCTYPE html>
 <html lang={lang}>
+
 	<head>
 		<Head title='Latcom' description='OOH Advertising Solutions' />
 	</head>
+
 <body>
 
-    <Header />
+    <div class="fixed top-0 z-40 w-full h-16">
 
-    <main>
+        <Header />
+
+    </div>
+
+    <main class="pt-16">
 
         <slot />
 
     </main>
 
-
 </body>
 </html>
+
+
+
+<script>
+    gsap.registerPlugin(ScrollTrigger);
+	import gsap from "gsap";
+	import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import Lenis from 'lenis';
+
+    // smooth scroll
+    const lenis = new Lenis();
+
+    /* lenis.on('scroll', (e:any) => {
+        console.log(e);
+    }); */
+
+    lenis.on('scroll', ScrollTrigger.update);
+
+    gsap.ticker.add((time)=>{
+        lenis.raf(time * 500)
+    });
+
+    gsap.ticker.lagSmoothing(0);
+</script>

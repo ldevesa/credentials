@@ -10,6 +10,7 @@ import logoLatcom from '../images/logo/logo-latcom.svg';
 
 import Hamburger from './Hamburger.astro';
 
+
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
@@ -34,6 +35,7 @@ function isActive(path: string) {
   const normalizedPath = translatedPath.endsWith('/') ? translatedPath.slice(0, -1) : translatedPath;
   return currentPath === normalizedPath;
 }
+
 ---
 
 
@@ -46,7 +48,7 @@ function isActive(path: string) {
     <!-- Boton menu hamburguesa - usa Alpine.js-->
     <Hamburger />
 
-    <ul 
+     <ul 
         class="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6">
 
         <li class={isActive('/') ? 'active' : ''} data-nav={t('nav.inicio')}>
@@ -102,6 +104,7 @@ function isActive(path: string) {
             </ul>
         </li> -->
     </ul>
+
 
 
     <div class="hidden lg:flex">

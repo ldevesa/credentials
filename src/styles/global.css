@@ -60,3 +60,44 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Evolventa', sans-serif;
     font-weight: bold;
 }
+
+/* Secciones Swipe con GSAP */
+/* General swipe section styling */
+.swipe-section {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    /* Ocultar contenido fuera de la vista */
+}
+
+/* Panel styles */
+.swipe-section .panel {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+}
+
+.red {
+    background: red;
+}
+
+.purple {
+    background: purple;
+}
+
+.blue {
+    background: blue;
+}
+
+.orange {
+    background: orange;
+}
