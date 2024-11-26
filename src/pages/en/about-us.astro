@@ -1,11 +1,20 @@
 ---
 import CorporateLayout from "../../layouts/CorporateLayout.astro";
+import { getLangFromUrl } from '../../i18n/utils';
+import { getI18N } from '../../i18n/loadTranslations';
+
+// Obtiene el idioma desde la URL
+const lang = getLangFromUrl(Astro.url);
+
+// Carga las traducciones según el idioma actual
+const translations = getI18N(lang);
 ---
 
 <CorporateLayout>
   <div class="swipe-section">
     <section class="panel red">
         <h1>About Us</h1>
+        <h3>{translations.welcome}</h3>
     </section>
     <section class="panel purple x-100">
       Section 2
@@ -22,7 +31,14 @@ import CorporateLayout from "../../layouts/CorporateLayout.astro";
 
 
 <script>
-    import { initSwipeSection } from "../../utils/gsapSwipeHorizontalScroll";
-    
-    initSwipeSection();
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  import { initSwipeSection } from "../../utils/gsapSwipeHorizontalScroll";
+  
+  initSwipeSection();
+
+  document.addEventListener("astro:after-swap", initSwipeSection);
 </script>

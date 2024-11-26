@@ -1,8 +1,7 @@
 import gsap from "gsap";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Configura la funcionalidad de swipe usando GSAP.
@@ -58,7 +57,7 @@ export function initSwipeSection() {
       if (target) {
         gsap.to(target, {
           yPercent: isScrollingDown ? 0 : 100,
-          duration: 0.75,
+          duration: 1,
           onComplete: () => {
             animating = false;
           },

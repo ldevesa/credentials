@@ -6,3 +6,13 @@ import CorporateLayout from "../../layouts/CorporateLayout.astro";
 <CorporateLayout>
     <h1>Clients</h1>
 </CorporateLayout>
+
+<script>
+    import { cleanScrollTriggers } from "../../utils/cleanScrollTriggers";
+    
+    cleanScrollTriggers();
+  
+    document.addEventListener("astro:before-swap", () => {
+      cleanScrollTriggers();
+    });
+  </script>

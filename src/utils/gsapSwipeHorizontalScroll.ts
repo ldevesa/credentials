@@ -1,14 +1,8 @@
 import gsap from "gsap";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
-/**
- * Configura la funcionalidad de swipe usando GSAP.
- * @param {string} selector - El selector de la sección de swipe (por ejemplo, ".swipe-section").
- * @param {boolean} isVertical - Indica si el scroll es vertical (true) o horizontal (false).
- */
 export function initSwipeSection() {
     let currentIndex: number = -1;
     let animating: boolean = false;
@@ -58,7 +52,7 @@ export function initSwipeSection() {
       if (target) {
         gsap.to(target, {
           xPercent: isScrollingDown ? 0 : 100,
-          duration: 0.75,
+          duration: 1,
           onComplete: () => {
             animating = false;
           },
@@ -86,6 +80,4 @@ export function initSwipeSection() {
         gotoPanel(currentIndex - 1, false);
       },
     });
-    
-    
 }
