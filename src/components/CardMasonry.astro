@@ -1,0 +1,67 @@
+---
+import type { CollectionEntry } from "astro:content";
+//import Tags from "./Tags.astro";
+
+type Props = CollectionEntry<'blog'>['data'] & { 
+    href: string;
+    body: string;
+    date: string;
+};
+
+const { href, image, title, body, date, tags } = Astro.props;
+
+---
+
+<!--   ✅ Product card 1 - Starts Here 👇 -->
+<div 
+    data-aos="flip-left" 
+    data-aos-easing="ease-out-cubic" 
+    data-aos-duration="2000" 
+    style={`height: ${Math.floor(Math.random() * (300 - 150 + 1)) + 250}px`} 
+>
+    <div class="w-full h-full overflow-hidden bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
+
+        <div class="relative group h-full">
+            <!-- Imagen de fondo -->
+            <a href={href}>
+                <img 
+                    class="w-full h-full object-cover rounded-t-xl"
+                    src={image}
+                    alt={title}
+                >
+            </a>
+
+            <!-- Contenido sobre la imagen -->
+            <div 
+                class="absolute inset-0 flex flex-col justify-center items-center bg-gray-900 bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            >
+                <a 
+                    href={href} 
+                    class="font-semibold text-lg inline-block hover:text-indigo-300 transition duration-300 ease-in-out"
+                >
+                    {title}
+                </a>
+                <p class="text-sm mt-2">
+                    {body}
+                </p>
+                <div class="text-sm  mt-2">
+                    <svg 
+                        height="13px" 
+                        width="13px" 
+                        class="mr-1" 
+                        viewBox="0 0 512 512" 
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M256,0C114.837,0,0,114.837,0,256s114.837,256,256,256s256-114.837,256-256S397.163,0,256,0z M277.333,256 c0,11.797-9.536,21.333-21.333,21.333h-85.333c-11.797,0-21.333-9.536-21.333-21.333s9.536-21.333,21.333-21.333h64v-128 c0-11.797,9.536-21.333,21.333-21.333s21.333,9.536,21.333,21.333V256z"
+                        ></path>
+                    </svg>
+                    <span>{date}</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

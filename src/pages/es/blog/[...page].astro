@@ -1,0 +1,63 @@
+---
+import BlogPostsList from "../../../components/BlogPostList.astro";
+import PostListMasonry from "../../../components/PostListMasonry.astro";
+import { getCollection, type CollectionEntry } from 'astro:content';
+import type { GetStaticPaths, Page } from 'astro';
+import BlogLayout from "../../../layouts/BlogLayout.astro";
+import Link from "../../../components/Link.astro";
+
+
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+  const allBlogPostsEn = await getCollection('blog', (entry: any) => {
+    return entry.id.startsWith('es/');
+  });
+
+  const paths = paginate(allBlogPostsEn, { pageSize: 6 });
+
+  console.log(paths); // Verifica las rutas generadas
+  return paths;
+};
+
+
+type Props = {
+  page: Page<CollectionEntry<'blog'>>;
+};
+
+const {page} = Astro.props;
+
+---
+
+<BlogLayout title="Posts">
+
+    <!-- Pagina del blog -->
+    blog
+    <PostListMasonry posts={page.data} start={page.start + 1} />
+    
+
+    <div class='my-20 flex justify-center gap-4'>
+
+      <div class='w-24 text-end'>
+        {
+          page.url.prev && (
+            <Link href={page.url.prev} rel='prev'>
+              &lt;&lt; Previous
+            </Link>
+          )
+        }
+      </div>
+
+      {page.currentPage}
+
+      <div class='w-24 text-start'>
+        {
+          page.url.next && (
+            <Link href={page.url.next} rel='prev'>
+              Next &gt;&gt;
+            </Link>
+          )
+        }
+      </div>
+      
+    </div>
+
+</BlogLayout>

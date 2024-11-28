@@ -52,3 +52,17 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## 🧞 Librerias y ayudas
+
+https://Alpinejs.dev
+https://js.hyperui.dev/
+https://www.penguinui.com/
+https://www.alpinetoolbox.com/
+
+
+https://gsap.com/
+
+https://tailwindcss.com/
+
+https://lenis.darkroom.engineering/

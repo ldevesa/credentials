@@ -24,8 +24,8 @@ export const ui = {
     'nav.nosotros': 'Nosotros',
     'nav.clientes': 'Clientes',
     'nav.categorias': 'Categorías',
-/*     'nav.blog': 'Notas',
-    'nav.red': 'Red Gestionar', */
+    'nav.blog': 'Notas',
+    /*'nav.red': 'Red Gestionar', */
     'nav.servicios': 'Servicios',
     'nav.cobertura': 'Cobertura',
     'nav.casos': 'Casos',
@@ -37,8 +37,8 @@ export const ui = {
     'nav.nosotros': 'About Us',
     'nav.clientes': 'Clients',
     'nav.categorias': 'Categories',
-/*     'nav.blog': 'Blog',
-    'nav.red': 'Red Gestionar', */
+    'nav.blog': 'Blog',
+    /*'nav.red': 'Red Gestionar', */
     'nav.servicios': 'Services',
     'nav.cobertura': 'Reach',
     'nav.casos': 'Cases',
@@ -50,8 +50,8 @@ export const ui = {
     'nav.nosotros': 'Nós',
     'nav.clientes': 'Clientes',
     'nav.categorias': 'Categorias',
-/*     'nav.blog': 'Blog',
-    'nav.red': 'Red Gestionar', */
+    'nav.blog': 'Blog',
+    /*'nav.red': 'Red Gestionar', */
     'nav.servicios': 'Serviços',
     'nav.cobertura': 'Cobertura',
     'nav.casos': 'Casos',
@@ -65,8 +65,8 @@ export const routes = {
     'nosotros': 'nosotros',
     'clientes': 'clientes',
     'categorias': 'categorias',
-/*     'blog': 'blog',
-    'red': 'red', */
+    'blog': 'blog',
+    /*'red': 'red', */
     'servicios': 'servicios',
     'cobertura': 'cobertura',
     'casos': 'casos',
@@ -79,8 +79,8 @@ export const routes = {
     'nosotros': 'about-us',
     'clientes': 'clients',
     'categorias': 'categories',
-/*     'blog': 'blog',
-    'red': 'red', */
+    'blog': 'blog',
+    /*'red': 'red', */
     'servicios': 'services',
     'cobertura': 'reach',
     'casos': 'cases',
@@ -93,8 +93,8 @@ export const routes = {
     'nosotros': 'nos',
     'clientes': 'clientes',
     'categorias': 'categorias',
-/*     'blog': 'blog',
-    'red': 'red', */
+    'blog': 'blog',
+    /*'red': 'red', */
     'servicios': 'servicos',
     'cobertura': 'cobertura',
     'casos': 'casos',
