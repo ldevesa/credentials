@@ -58,11 +58,16 @@ Feel free to check [our documentation](https://docs.astro.build) or jump into ou
 https://Alpinejs.dev
 https://js.hyperui.dev/
 https://www.penguinui.com/
+
 https://www.alpinetoolbox.com/
 
+https://www.material-tailwind.com/
 
 https://gsap.com/
 
 https://tailwindcss.com/
 
 https://lenis.darkroom.engineering/
+
+
+https://playwright.dev/

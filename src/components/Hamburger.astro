@@ -12,6 +12,16 @@
                 <span  class="block absolute  h-0.5 w-7 text-white bg-current transform  transition duration-500 ease-in-out" :class="{'-rotate-45': open, ' translate-y-1.5': !open}"></span>
             </div>
         </button>
+        <!-- Menu lateral -->
+        <div x-show="open" 
+             x-transition 
+             class="fixed inset-0 bg-gray-900 bg-opacity-50 z-40" 
+             @click="open = false"></div>
+        <div x-show="open" 
+             x-transition 
+             class="fixed top-0 left-0 h-full w-64 bg-white shadow z-50">
+            <!-- Contenido del menú -->
+        </div>
     </nav>
 </div>
 
@@ -74,6 +84,16 @@ function setupHamburgerMenu() {
     // Agrega un evento para alternar la clase que abre/cierra el menú
     menuButton.addEventListener('click', () => {
       sidebar.classList.toggle('-translate-x-full');
+    });
+
+    // Agrega un evento para cerrar el menú al hacer clic fuera
+    document.addEventListener('click', (event: any) => {
+      const isClickInsideSidebar = sidebar.contains(event.target);
+      const isClickOnMenuButton = menuButton.contains(event.target);
+
+      if (!isClickInsideSidebar && !isClickOnMenuButton) {
+        sidebar.classList.add('-translate-x-full'); // Asegura que el menú esté cerrado
+      }
     });
     // Marca el botón como inicializado para evitar duplicar listeners
     menuButton.setAttribute('data-initialized', 'true');

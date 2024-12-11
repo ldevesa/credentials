@@ -1,0 +1,80 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Card from "./CardMasonry.astro";
+import Link from "./Link.astro";
+
+/* export type Props = {
+  posts: CollectionEntry<'blog'>[];
+  start?: number;
+}; */
+
+interface Props {
+    posts: CollectionEntry<'blog'>[];
+    start?: number;
+}
+
+const { posts, start = 1 } = Astro.props;
+//console.log('Astro.url.pathname', Astro.url.pathname)
+
+// la expresión regular \/blog\/\d+ verifica si "/blog/" seguido de uno o más dígitos está presente en cualquier parte de la cadena
+var regex = /\/blog\/\d+/;
+var resultregex = regex.test(Astro.url.pathname);
+console.log('resultregex PostList', resultregex);
+
+---
+
+<ol 
+  class="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-4 mt-10 mb-5" 
+  x-data 
+  x-masonry 
+  x-data x-init="$nextTick(() => { window.dispatchEvent(new Event('reload:masonry')) })"
+  start={start}
+  style="grid-template-rows: auto;"
+>
+  {
+    posts.map((post) => (
+      <li 
+        class="w-full h-min" 
+      >
+
+        <Card 
+          {...post.data} 
+          body={post.data.author}
+          date={post.data.publishDate.toLocaleDateString('en', {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+          })}
+          href={resultregex ? `../blog/${post.slug.split('/')[1]}` : `./blog/${post.slug.split('/')[1]}`}
+        />
+        
+      </li>
+    ))
+  }
+</ol>
+
+
+<!-- <script is:inline src="https://unpkg.com/alpinejs-masonry@latest/dist/masonry.min.js"></script> -->
+<script is:inline>
+  (()=>{function o(i){let e=parseFloat(getComputedStyle(i).gap),n=[...i.childNodes].filter(t=>t.nodeType===1&&t.tagName!=="TEMPLATE"),r=getComputedStyle(i).gridTemplateColumns.split(" ").length;n.forEach(t=>t.style.removeProperty("margin-top")),r!==1&&n.forEach(function(t,s){let a=n[s-r];if(!a)return;let m=t.getBoundingClientRect().top,c=a.getBoundingClientRect().bottom,d=m-c;d!==e&&(t.style.marginTop=`-${d-e}px`)})}function p(i){i.directive("masonry",(e,{modifiers:n},{cleanup:r})=>{let t=n[0],s=n[1]||2500;t==="wait"?setTimeout(()=>o(e),s):o(e),t==="poll"&&setInterval(()=>o(e),s),window.addEventListener("resize",()=>o(e)),window.addEventListener("reload:masonry",()=>o(e)),r(()=>{window.removeEventListener("resize",o),window.addEventListener("reload:masonry",o)})})}document.addEventListener("alpine:init",()=>window.Alpine.plugin(p));})();
+  
+  // Recalcular Masonry al finalizar la inicialización de Alpine
+  document.addEventListener('alpine:init', () => {
+    window.Alpine.store('masonryReady', false);
+
+    // Usar setTimeout para retrasar la ejecución y asegurar que Alpine termine de renderizar
+    setTimeout(() => {
+      window.dispatchEvent(new Event('reload:masonry'));
+      window.Alpine.store('masonryReady', true);
+    }, 50);  // Ajusta el tiempo si es necesario
+  });
+
+  // Observa cambios en el DOM y recalcula si aparecen nuevos elementos
+  document.addEventListener('DOMContentLoaded', () => {
+    const observer = new MutationObserver(() => {
+      window.dispatchEvent(new Event('reload:masonry'));
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+  });
+</script>
