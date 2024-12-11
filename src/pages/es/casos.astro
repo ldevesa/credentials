@@ -1,8 +1,12 @@
 ---
-import CorporateLayout from "../../layouts/CorporateLayout.astro";
-
+import CorporateLayout from "@/layouts/CorporateLayout.astro";
+import { Dropdown } from "@/components/dropdown";
 ---
 
 <CorporateLayout>
     <h1>Casos</h1>
+    <div class="flex justify-center">
+        <Dropdown client:only="react" />
+    </div>
+    
 </CorporateLayout>
