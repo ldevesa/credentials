@@ -1,5 +1,5 @@
 ---
-import type { CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from "astro:content";
 import Card from "./CardMasonry.astro";
 import Link from "./Link.astro";
 
@@ -9,8 +9,8 @@ import Link from "./Link.astro";
 }; */
 
 interface Props {
-    posts: CollectionEntry<'blog'>[];
-    start?: number;
+  posts: CollectionEntry<"blog">[];
+  start?: number;
 }
 
 const { posts, start = 1 } = Astro.props;
@@ -19,35 +19,34 @@ const { posts, start = 1 } = Astro.props;
 // la expresión regular \/blog\/\d+ verifica si "/blog/" seguido de uno o más dígitos está presente en cualquier parte de la cadena
 var regex = /\/blog\/\d+/;
 var resultregex = regex.test(Astro.url.pathname);
-console.log('resultregex PostList', resultregex);
-
+console.log("resultregex PostList", resultregex);
 ---
 
-<ol 
-  class="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-4 mt-10 mb-5" 
-  x-data 
-  x-masonry 
-  x-data x-init="$nextTick(() => { window.dispatchEvent(new Event('reload:masonry')) })"
+<ol
+  class="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-4 mt-10 mb-5"
+  x-data
+  x-masonry
+  x-init="$nextTick(() => window.dispatchEvent(new Event('reload:masonry')))"
   start={start}
   style="grid-template-rows: auto;"
 >
   {
     posts.map((post) => (
-      <li 
-        class="w-full h-min" 
-      >
-
-        <Card 
-          {...post.data} 
+      <li class="w-full h-fit">
+        <Card
+          {...post.data}
           body={post.data.author}
-          date={post.data.publishDate.toLocaleDateString('en', {
+          date={post.data.publishDate.toLocaleDateString("en", {
             year: "numeric",
             month: "short",
-            day: "numeric"
+            day: "numeric",
           })}
-          href={resultregex ? `../blog/${post.slug.split('/')[1]}` : `./blog/${post.slug.split('/')[1]}`}
+          href={
+            resultregex
+              ? `../blog/${post.slug.split("/")[1]}`
+              : `./blog/${post.slug.split("/")[1]}`
+          }
         />
-        
       </li>
     ))
   }
@@ -56,25 +55,57 @@ console.log('resultregex PostList', resultregex);
 
 <!-- <script is:inline src="https://unpkg.com/alpinejs-masonry@latest/dist/masonry.min.js"></script> -->
 <script is:inline>
-  (()=>{function o(i){let e=parseFloat(getComputedStyle(i).gap),n=[...i.childNodes].filter(t=>t.nodeType===1&&t.tagName!=="TEMPLATE"),r=getComputedStyle(i).gridTemplateColumns.split(" ").length;n.forEach(t=>t.style.removeProperty("margin-top")),r!==1&&n.forEach(function(t,s){let a=n[s-r];if(!a)return;let m=t.getBoundingClientRect().top,c=a.getBoundingClientRect().bottom,d=m-c;d!==e&&(t.style.marginTop=`-${d-e}px`)})}function p(i){i.directive("masonry",(e,{modifiers:n},{cleanup:r})=>{let t=n[0],s=n[1]||2500;t==="wait"?setTimeout(()=>o(e),s):o(e),t==="poll"&&setInterval(()=>o(e),s),window.addEventListener("resize",()=>o(e)),window.addEventListener("reload:masonry",()=>o(e)),r(()=>{window.removeEventListener("resize",o),window.addEventListener("reload:masonry",o)})})}document.addEventListener("alpine:init",()=>window.Alpine.plugin(p));})();
-  
-  // Recalcular Masonry al finalizar la inicialización de Alpine
-  document.addEventListener('alpine:init', () => {
-    window.Alpine.store('masonryReady', false);
+(() => {
+  function initializeMasonry(container) {
+    if (!container) return;
+    let gap = parseFloat(getComputedStyle(container).gap);
+    let items = [...container.childNodes].filter(node => node.nodeType === 1 && node.tagName !== "TEMPLATE");
+    let columns = getComputedStyle(container).gridTemplateColumns.split(" ").length;
 
-    // Usar setTimeout para retrasar la ejecución y asegurar que Alpine termine de renderizar
-    setTimeout(() => {
-      window.dispatchEvent(new Event('reload:masonry'));
-      window.Alpine.store('masonryReady', true);
-    }, 50);  // Ajusta el tiempo si es necesario
-  });
+    items.forEach(item => item.style.removeProperty("margin-top"));
 
-  // Observa cambios en el DOM y recalcula si aparecen nuevos elementos
-  document.addEventListener('DOMContentLoaded', () => {
-    const observer = new MutationObserver(() => {
-      window.dispatchEvent(new Event('reload:masonry'));
+    if (columns === 1) return;
+
+    items.forEach((item, index) => {
+      let prevItem = items[index - columns];
+      if (!prevItem) return;
+
+      let top = item.getBoundingClientRect().top;
+      let bottom = prevItem.getBoundingClientRect().bottom;
+      let offset = top - bottom;
+
+      if (offset !== gap) {
+        item.style.marginTop = `-${offset - gap}px`;
+      }
     });
+  }
 
-    observer.observe(document.body, { childList: true, subtree: true });
+  function setupMasonry() {
+    const containers = document.querySelectorAll('[x-masonry]');
+    if (containers.length === 0) {
+      console.warn("No Masonry containers found.");
+      return;
+    }
+
+    containers.forEach(container => {
+      initializeMasonry(container);
+    });
+  }
+
+  // Reinitialize Masonry on `astro:page-load`
+  document.addEventListener('astro:page-load', () => {
+    console.log('Astro page loaded, reinitializing Masonry...');
+    setupMasonry();
   });
+
+  // Initialize Masonry on DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded, initializing Masonry...');
+    setupMasonry();
+  });
+
+  // Optional: Retry initialization in case of delayed rendering
+  setTimeout(setupMasonry, 500);
+})();
+
 </script>
