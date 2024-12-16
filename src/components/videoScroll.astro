@@ -1,0 +1,52 @@
+---
+const { video } = Astro.props;
+
+if (!video) {
+  throw new Error("Se requiere la propiedad 'video' para el componente VideoScroll.");
+}
+---
+<div id="video-container">
+    <video class="video-background" id="video-background" muted loop playsinline>
+      <source src={video} type="video/mp4" />
+      Tu navegador no soporta la reproducción de video.
+    </video>
+</div>
+
+<style>
+ #video-container {
+    position: relative;
+    min-height: 200vh; /* Hace el contenedor lo suficientemente alto para el efecto */
+  }
+
+  .video-background {
+    position: sticky;
+    top: 0; /* Se "pega" al borde superior cuando llega al viewport */
+    width: 100%;
+    height: 100vh; /* Asegura que el video cubra toda la ventana visible */
+    object-fit: cover; /* Escala el video correctamente */
+    z-index: -1; /* Permite colocar contenido por encima del video */
+  }
+  
+  </style>
+
+<script>
+    import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { initVideoScroll } from "./../utils/gsapVideoScroll";
+
+    // Registra el plugin ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
+
+    const init = () => {
+        console.log("Inicializando video scroll...");
+        // Limpia instancias previas de ScrollTrigger antes de inicializar
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+        initVideoScroll();
+    };
+
+    // Inicialización al cargar y después de cualquier cambio dinámico
+    document.addEventListener("astro:after-swap", init);
+
+    // Inicialización al cargar
+    init();
+</script>

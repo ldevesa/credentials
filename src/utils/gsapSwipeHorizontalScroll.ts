@@ -71,6 +71,7 @@ export function initSwipeSection() {
       pin: true,
       start: "top top",
       end: "+=100%",
+      markers: true,
       onEnter: () => {
         intentObserver.enable();
         gotoPanel(currentIndex + 1, true);
