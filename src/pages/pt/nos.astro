@@ -1,8 +1,47 @@
 ---
 import CorporateLayout from "../../layouts/CorporateLayout.astro";
-
 ---
 
 <CorporateLayout>
     <h1>Nós</h1>
+    <div id="svg-container">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" id="animated-svg">
+          <path
+            d="M10 80 C 40 10, 65 10, 95 80 S 150 150, 180 80"
+            stroke="black"
+            stroke-width="2"
+            fill="none"
+            stroke-dasharray="300"
+            stroke-dashoffset="300"
+          />
+        </svg>
+      </div>
 </CorporateLayout>
+
+<style>
+    #svg-container {
+      min-height: 200vh; /* Para que haya espacio para el efecto */
+    }
+    #animated-svg {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+    }
+  </style>
+
+  <script>
+    import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { initSvgScroll } from "../../utils/gsapSvg";
+
+    // Registra el plugin ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
+
+    document.addEventListener("astro:after-swap", () => {
+        initSvgScroll();
+    });
+
+    // Inicialización al cargar
+    initSvgScroll();
+  </script>

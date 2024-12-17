@@ -1,8 +1,13 @@
 ---
 import CorporateLayout from "../../layouts/CorporateLayout.astro";
-
+import Chart from "@/components/AmchartsTest";
+import { Dropdown } from "@/components/dropdown";
+import MapChart from "../../components/AmchartsCobertura";
 ---
 
 <CorporateLayout>
     <h1>Cobertura</h1>
+    <!-- <Chart client:only="react" />
+    <Dropdown client:only="react" /> -->
+    <MapChart client:only="react" />
 </CorporateLayout>

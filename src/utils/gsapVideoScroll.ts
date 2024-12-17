@@ -5,7 +5,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export function initVideoScroll() {
   // Verifica si el video y el contenedor existen antes de continuar
-  const video = document.querySelector("#video-background");
+  const video = document.querySelector("#video-background") as HTMLVideoElement | null;
   const container = document.querySelector("#video-container");
 
   if (!video || !container) {
@@ -13,41 +13,46 @@ export function initVideoScroll() {
     return;
   }
 
-  const htmlVideo = video as HTMLVideoElement;
-
   if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") {
     console.error("GSAP o ScrollTrigger no están disponibles.");
     return;
   }
 
-  htmlVideo.addEventListener('loadedmetadata', () => {
-    const videoDuration = htmlVideo.duration;
+  // Función para inicializar GSAP después de cargar los metadatos del video
+  const initializeScrollTrigger = () => {
+    const videoDuration = video.duration;
+
     if (isNaN(videoDuration) || !isFinite(videoDuration)) {
       console.error("La duración del video no es válida.");
       return;
     }
 
-    console.log('Duración del video:', videoDuration);
-    htmlVideo.pause();
+    console.log("Duración del video:", videoDuration);
 
-    // Mata cualquier instancia de ScrollTrigger existente antes de crear una nueva
-    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    // Pausa el video inicialmente
+    video.pause();
 
-    // Configuración de ScrollTrigger para avanzar o retroceder el video con el scroll
-    gsap.to(htmlVideo, {
-      currentTime: videoDuration,
+    // Mata cualquier instancia de ScrollTrigger existente
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+
+    // Configura ScrollTrigger para sincronizar el video con el scroll
+    gsap.to(video, {
+      currentTime: videoDuration, // Avanza el tiempo del video hasta su duración total
       scrollTrigger: {
-        trigger: container, // El contenedor o el elemento que activa el scroll
-        start: "top top", // Empieza cuando el contenedor esté en la parte superior
-        end: "bottom top", // Termina cuando el contenedor llegue al final
+        trigger: container, // Elemento que activa el scroll
+        start: "top top", // Cuando el contenedor está en la parte superior
+        end: "bottom top", // Cuando el contenedor llega al final
         scrub: true, // Sincroniza el video con el scroll
         markers: false, // Desactiva los marcadores de depuración
-      }
+      },
     });
-  });
-
-  // Inicializar el script después de que la página esté completamente cargada
-  window.onload = () => {
-    initVideoScroll();
   };
+
+  // Si los metadatos ya están cargados, inicializa directamente
+  if (video.readyState >= 1) {
+    initializeScrollTrigger();
+  } else {
+    // Si no, espera a que se carguen
+    video.addEventListener("loadedmetadata", initializeScrollTrigger, { once: true });
+  }
 }

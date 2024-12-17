@@ -39,6 +39,9 @@ if (!video) {
 
     const init = () => {
         console.log("Inicializando video scroll...");
+
+        const video = document.getElementById("video-background");
+        
         // Limpia instancias previas de ScrollTrigger antes de inicializar
         ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
         initVideoScroll();

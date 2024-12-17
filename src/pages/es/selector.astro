@@ -4,6 +4,7 @@ import CrossFadeBack from "../../components/CrossFadeBack.astro";
 
 import { Image } from 'astro:assets';
 import logoLatcom from '../../images/logo/logo-latcom.svg';
+
 ---
 
 <Layout title="Selector">
@@ -67,3 +68,11 @@ import logoLatcom from '../../images/logo/logo-latcom.svg';
     font-size: 20px;
   }
 </style>
+
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  // Registra el plugin ScrollTrigger
+  gsap.registerPlugin(ScrollTrigger);
+</script>
