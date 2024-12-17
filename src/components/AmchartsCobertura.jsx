@@ -3,6 +3,7 @@ import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
 import am5geodata_worldLow from '@amcharts/amcharts5-geodata/worldLow';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
+import './AmchartsCobertura.css';
 
 const MapChart = () => {
   const chartDivRef = useRef(null);
@@ -122,14 +123,6 @@ const MapChart = () => {
       geometry: am5map.getGeoRectangle(90, 180, -90, -180),
     });
 
-    // Remove logo
-    setTimeout(() => {
-      const logo = document.querySelector('.amcharts-logo');
-      if (logo) {
-        logo.style.display = 'none';
-      }
-    }, 1000);
-
 
     // Rotate animation
     chart.animate({
@@ -143,12 +136,17 @@ const MapChart = () => {
     // Animate chart
     chart.appear(1000, 100);
 
+
+  
+
     return () => {
       root.dispose();
     };
   }, []);
 
-  return <div id="chartdiv" ref={chartDivRef} style={{ width: '50%', height: '500px' }} />;
+  return <div id="chartdiv" ref={chartDivRef} style={{ width: '50%', height: '500px' }} >
+    <div className="logo-cover"></div>
+  </div>;
 };
 
 export default MapChart;
