@@ -7,6 +7,8 @@ import './AmchartsCobertura.css';
 
 const MapChart = () => {
   const chartDivRef = useRef(null);
+  let animation; // Variable para la animación de rotación
+  let inactivityTimer; // Temporizador para reiniciar la animación
 
   useEffect(() => {
     // Create root element
@@ -25,6 +27,7 @@ const MapChart = () => {
         paddingTop: 20,
         paddingLeft: 20,
         paddingRight: 20,
+        wheelY: "none"
       })
     );
 
@@ -39,6 +42,13 @@ const MapChart = () => {
       US: {
         color: '#FF0000',
         contact: 'John Doe',
+        position: 'CEO',
+        phone: '+1 123-456-7890',
+      },
+      AR: {
+        color: '#000036',
+        office: 'Sede Argentina',
+        contact: 'Raul Mendoza',
         position: 'CEO',
         phone: '+1 123-456-7890',
       },
@@ -76,7 +86,7 @@ const MapChart = () => {
 
     // Set up tooltips and styles for special countries
     polygonSeries.mapPolygons.template.setAll({
-      tooltipText: '{name}\nContact: {contact}\nPosition: {position}\nPhone: {phone}',
+      tooltipText: '{name}\nContact: {contact}\nPosition: {position}\nPhone: {phone}\nOffice: {office}',
       interactive: true,
       fill: am5.color('#CCCCCC'), // Default color
     });
@@ -123,24 +133,47 @@ const MapChart = () => {
       geometry: am5map.getGeoRectangle(90, 180, -90, -180),
     });
 
+    // Función para iniciar la animación
+    const startRotation = () => {
+      animation = chart.animate({
+        key: 'rotationX',
+        from: chart.get('rotationX'),
+        to: chart.get('rotationX') + 360,
+        duration: 30000,
+        loops: Infinity,
+      });
+    };
 
-    // Rotate animation
-    chart.animate({
-    key: "rotationX",
-    from: 0,
-    to: 360,
-    duration: 30000,
-    loops: Infinity
-    });
+    // Iniciar la rotación automáticamente al cargar la página
+    startRotation();
 
     // Animate chart
-    chart.appear(1000, 100);
+    //chart.appear(1000, 100);
 
 
+    // Detener animación al interactuar
+    const stopRotation = () => {
+      if (animation) {
+        animation.stop();
+        animation = null;
+      }
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        startRotation(); // Reiniciar rotación después de 5 segundos
+      }, 1500);
+    };
+
+    // Escuchar eventos de interacción
+    const handleUserInteraction = () => stopRotation();
+    chartDivRef.current.addEventListener('mousedown', handleUserInteraction);
+    chartDivRef.current.addEventListener('wheel', handleUserInteraction);
   
-
+    // Limpiar al desmontar el componente
     return () => {
       root.dispose();
+      clearTimeout(inactivityTimer);
+      chartDivRef.current.removeEventListener('mousedown', handleUserInteraction);
+      chartDivRef.current.removeEventListener('wheel', handleUserInteraction);
     };
   }, []);
 
