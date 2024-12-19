@@ -31,6 +31,53 @@ const MapChart = () => {
       })
     );
 
+    let cont = chart.children.push(
+      am5.Container.new(root, {
+        layout: root.horizontalLayout,
+        x: 20,
+        y: 40
+      })
+    );
+
+    // Add labels and controls switch globe/map
+    cont.children.push(
+      am5.Label.new(root, {
+        centerY: am5.p50,
+        text: "Globe"
+      })
+    );
+
+    let switchButton = cont.children.push(
+      am5.Button.new(root, {
+        themeTags: ["switch"],
+        centerY: am5.p50,
+        icon: am5.Circle.new(root, {
+          themeTags: ["icon"]
+        })
+      })
+    );
+    
+    switchButton.on("active", function() {
+      if (switchButton.get("active")) {
+        chart.set("projection", am5map.geoMercator());
+        chart.set("panY", "translateY");
+        chart.set("rotationY", 0);
+        backgroundSeries.mapPolygons.template.set("fillOpacity", 0);
+      } else {
+        chart.set("projection", am5map.geoOrthographic());
+        chart.set("panY", "rotateY");
+    
+        backgroundSeries.mapPolygons.template.set("fillOpacity", 0.1);
+      }
+    });
+    
+    cont.children.push(
+      am5.Label.new(root, {
+        centerY: am5.p50,
+        text: "Map"
+      })
+    );
+
     // Create main polygon series for countries
     const polygonSeries = chart.series.push(
       am5map.MapPolygonSeries.new(root, {
@@ -39,56 +86,32 @@ const MapChart = () => {
     );
 
     const specialCountries = {
+      CA: {
+        color: '#000036',
+      },
       US: {
-        color: '#FF0000',
-        contact: 'John Doe',
-        position: 'CEO',
-        phone: '+1 123-456-7890',
+        color: '#000036',
       },
       AR: {
         color: '#000036',
-        office: 'Sede Argentina',
-        contact: 'Raul Mendoza',
-        position: 'CEO',
-        phone: '+1 123-456-7890',
       },
       BR: {
-        color: '#FF0000',
-        contact: 'Ana Silva',
-        position: 'Marketing Director',
-        phone: '+55 21 98765-4321',
+        color: '#000036',
+
       },
-      CN: {
-        color: '#FF0000',
-        contact: 'Li Wei',
-        position: 'Regional Manager',
-        phone: '+86 10 1234-5678',
-      },
-      RU: {
-        color: '#FF0000',
-        contact: 'Ivan Petrov',
-        position: 'Sales Manager',
-        phone: '+7 495 123-4567',
-      },
-      IN: {
-        color: '#FF0000',
-        contact: 'Raj Patel',
-        position: 'Finance Director',
-        phone: '+91 22 3456-7890',
-      },
-      ZA: {
+/*       ZA: {
         color: '#FF0000',
         contact: 'Zanele Moyo',
         position: 'Operations Manager',
         phone: '+27 11 234-5678',
-      },
+      }, */
     };
 
     // Set up tooltips and styles for special countries
     polygonSeries.mapPolygons.template.setAll({
-      tooltipText: '{name}\nContact: {contact}\nPosition: {position}\nPhone: {phone}\nOffice: {office}',
+      //tooltipText: '{name}\nContact: {contact}\nPosition: {position}\nPhone: {phone}\nOffice: {office}',
       interactive: true,
-      fill: am5.color('#CCCCCC'), // Default color
+      fill: am5.color('#dddddd'), // Default color
     });
 
     polygonSeries.mapPolygons.template.adapters.add('tooltipText', (tooltipText, target) => {
@@ -133,6 +156,133 @@ const MapChart = () => {
       geometry: am5map.getGeoRectangle(90, 180, -90, -180),
     });
 
+    
+    // Add point series for markers
+    const pointSeries = chart.series.push(am5map.MapPointSeries.new(root, {}));
+    //const colorset = am5.ColorSet.new(root, {});
+
+    pointSeries.bullets.push(function (root, series, dataItem) {
+      const container = am5.Container.new(root, {
+        //tooltipText: "{pais}\n{centro}\nContact: {contact}\n{qr}\nPosition: {position}\nPhone: {phone}",
+        tooltipHTML: `
+        <div style="text-align: center;">
+          <strong>{pais}</strong><br>
+          Contact: {contact}<br>
+          Position: {position}<br>
+          Phone: {phone}<br>
+          <img src="{qr}" alt="QR Code" style="width: 100px; height: 100px; margin-top: 5px;">
+        </div>
+        `,
+        cursorOverStyle: "pointer",
+      });
+
+      /* container.events.on("click", (e) => {
+        window.location.href = e.target.dataItem.dataContext.url;
+      }); */
+
+      const circle = container.children.push(
+        am5.Circle.new(root, {
+          radius: 4,
+          tooltipY: 0,
+          //fill: colorset.next(),
+          fill: dataItem.dataContext.color,
+          strokeOpacity: 0,
+        })
+      );
+
+      const circle2 = container.children.push(
+        am5.Circle.new(root, {
+          radius: 4,
+          tooltipY: 0,
+          //fill: colorset.next(),
+          fill: dataItem.dataContext.color,
+          strokeOpacity: 0,
+          tooltipText: "{pais}",
+        })
+      );
+
+      circle.animate({
+        key: "scale",
+        from: 1,
+        to: 5,
+        duration: 600,
+        easing: am5.ease.out(am5.ease.cubic),
+        loops: Infinity,
+      });
+
+      circle.animate({
+        key: "opacity",
+        from: 1,
+        to: 0.1,
+        duration: 600,
+        easing: am5.ease.out(am5.ease.cubic),
+        loops: Infinity,
+      });
+
+      return am5.Bullet.new(root, {
+        sprite: container,
+      });
+    });
+
+    // Define cities - https://www.coordenadas-gps.com/
+    const cities = [
+      {
+        pais: "Canada",
+        latitude: 51.2538,
+        longitude: -113.5086,
+        centro: "Operaciones",
+        qr: "/credentials/images/qr/vbueno.png",
+        url: "mailto:2Jl9a@example.com",
+        contact: "Jean Dupont",
+        position: "Regional Manager",
+        phone: "+32 2 123 4567",
+        color: am5.color(0xFF5733), // Color personalizado para Canadá
+      },
+      {
+        pais: 'USA',
+        latitude: 37.0902,
+        longitude: -95.7129,
+        centro: 'Oficina comercial',
+        qr: "/credentials/images/qr/vbueno.png",
+        url: 'http://www.amcharts.com',
+        contact: 'John Doe',
+        position: 'Sales Manager',
+        phone: '+1 123 456 7890',
+        color: am5.color(0x02DE47), // Color personalizado para USA
+      },
+    ];
+
+    // Function to add cities to point series
+    function addCity(longitude, latitude, pais, centro, qr, url, contact, position, phone, color) {
+      pointSeries.data.push({
+        url: url,
+        geometry: { type: "Point", coordinates: [longitude, latitude] },
+        pais: pais,
+        centro: centro,
+        qr: qr,
+        contact: contact,
+        position: position,
+        phone: phone,
+        color: color
+      });
+    }
+
+    // Add cities to the map
+    cities.forEach((city) => {
+      addCity(
+        city.longitude,
+        city.latitude,
+        city.pais,
+        city.centro,
+        city.qr,
+        city.url,
+        city.contact,
+        city.position,
+        city.phone,
+        city.color
+      );
+    });
+
     // Función para iniciar la animación
     const startRotation = () => {
       animation = chart.animate({
@@ -147,10 +297,6 @@ const MapChart = () => {
     // Iniciar la rotación automáticamente al cargar la página
     startRotation();
 
-    // Animate chart
-    //chart.appear(1000, 100);
-
-
     // Detener animación al interactuar
     const stopRotation = () => {
       if (animation) {
@@ -159,15 +305,15 @@ const MapChart = () => {
       }
       clearTimeout(inactivityTimer);
       inactivityTimer = setTimeout(() => {
-        startRotation(); // Reiniciar rotación después de 5 segundos
-      }, 1500);
+        startRotation(); // Reiniciar rotación después de 10 segundos
+      }, 10000);
     };
 
     // Escuchar eventos de interacción
     const handleUserInteraction = () => stopRotation();
     chartDivRef.current.addEventListener('mousedown', handleUserInteraction);
     chartDivRef.current.addEventListener('wheel', handleUserInteraction);
-  
+
     // Limpiar al desmontar el componente
     return () => {
       root.dispose();
