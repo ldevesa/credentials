@@ -10,7 +10,7 @@
     bottom: 0;
     left: 0;
     width: 70px; /* Adjust the width to cover the logo */
-    height: 40px; /* Adjust the height to cover the logo */
+    height: 20px; /* Adjust the height to cover the logo */
     background: rgb(255, 255, 255); /* Background color to match the chart's background */
     z-index: 1000; /* Ensure it is on top of the chart */
 }

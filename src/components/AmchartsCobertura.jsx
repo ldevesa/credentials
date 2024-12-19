@@ -165,20 +165,29 @@ const MapChart = () => {
       const container = am5.Container.new(root, {
         //tooltipText: "{pais}\n{centro}\nContact: {contact}\n{qr}\nPosition: {position}\nPhone: {phone}",
         tooltipHTML: `
-        <div style="text-align: center;">
+        <div style="text-align: left;">
           <strong>{pais}</strong><br>
-          Contact: {contact}<br>
-          Position: {position}<br>
-          Phone: {phone}<br>
-          <img src="{qr}" alt="QR Code" style="width: 100px; height: 100px; margin-top: 5px;">
+          {centro}<br>
+          {contact}<br>
+          {position}<br>
+          <p>Ver más ...</p>
+          <!--{phone}<br>
+          <img src="{qr}" alt="QR Code" style="width: 100px; height: 100px; margin-top: 5px;">-->
         </div>
         `,
         cursorOverStyle: "pointer",
       });
 
+      // Habilita a que la tooltip se muestre al hacer clic en el punto
       /* container.events.on("click", (e) => {
         window.location.href = e.target.dataItem.dataContext.url;
       }); */
+
+      // Evento click para mostrar el popup
+      container.events.on("click", (e) => {
+        const data = e.target.dataItem.dataContext;
+        showPopup(data);
+      });
 
       const circle = container.children.push(
         am5.Circle.new(root, {
@@ -223,6 +232,69 @@ const MapChart = () => {
         sprite: container,
       });
     });
+
+
+    // Función para cerrar el popup
+    window.closePopup = function () {
+      const popup = document.getElementById("popup");
+      popup.style.display = "none";
+    };
+
+    // Función para mostrar el popup
+    function showPopup(data) {
+      const popup = document.getElementById("popup");
+      const popupContent = `
+        <h3>${data.pais}</h3>
+        <p><strong>Contact:</strong> ${data.contact}</p>
+        <p><strong>Position:</strong> ${data.position}</p>
+        <p><strong>Phone:</strong> ${data.phone}</p>
+        <img src="${data.qr}" alt="QR Code" style="max-width: 100px;" />
+        <button onclick="closePopup()">Cerrar</button>
+      `;
+
+      popup.innerHTML = popupContent;
+      popup.style.display = "block";
+    }
+
+    // Función para cerrar el popup
+    function closePopup() {
+      const popup = document.getElementById("popup");
+      popup.style.display = "none";
+    }
+
+    // Estilos CSS para el popup
+    const style = document.createElement("style");
+    style.textContent = `
+      #popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 1px solid #ccc;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        padding: 20px;
+        z-index: 1000;
+        display: none;
+      }
+      #popup button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background: #000036;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      #popup button:hover {
+        background: #000066;
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Popup HTML container
+    const popupDiv = document.createElement("div");
+    popupDiv.id = "popup";
+    document.body.appendChild(popupDiv);
 
     // Define cities - https://www.coordenadas-gps.com/
     const cities = [
@@ -323,7 +395,7 @@ const MapChart = () => {
     };
   }, []);
 
-  return <div id="chartdiv" ref={chartDivRef} style={{ width: '50%', height: '500px' }} >
+  return <div id="chartdiv" ref={chartDivRef} style={{ width: '50%', height: '85vh' }} >
     <div className="logo-cover"></div>
   </div>;
 };
