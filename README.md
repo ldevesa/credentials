@@ -70,4 +70,4 @@ https://tailwindcss.com/
 https://lenis.darkroom.engineering/
 
 
-https://playwright.dev/
+https://www.amcharts.com/

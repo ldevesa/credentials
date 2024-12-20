@@ -31,14 +31,14 @@ const translations = getI18N(lang);
 
 
 <script>
-/*   import gsap from "gsap";
+  import gsap from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-  gsap.registerPlugin(ScrollTrigger); */
+  gsap.registerPlugin(ScrollTrigger);
 
   import { initSwipeSection } from "../../utils/gsapSwipeHorizontalScroll";
   
   initSwipeSection();
 
-  document.addEventListener("astro:after-swap", initSwipeSection);
+  document.addEventListener("astro:page-load", initSwipeSection);
 </script>
