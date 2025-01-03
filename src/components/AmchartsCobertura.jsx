@@ -60,7 +60,7 @@ const MapChart = () => {
     switchButton.on("active", function() {
       if (switchButton.get("active")) {
         chart.set("projection", am5map.geoMercator());
-        chart.set("panY", "translateY");
+        chart.set("panY", 0);
         chart.set("rotationY", 0);
         backgroundSeries.mapPolygons.template.set("fillOpacity", 0);
       } else {
