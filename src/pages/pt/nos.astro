@@ -38,10 +38,10 @@ import CorporateLayout from "../../layouts/CorporateLayout.astro";
     // Registra el plugin ScrollTrigger
     gsap.registerPlugin(ScrollTrigger);
 
-    document.addEventListener("astro:after-swap", () => {
+     // Inicialización al cargar
+     initSvgScroll();
+
+    document.addEventListener("astro:page-load", () => {
         initSvgScroll();
     });
-
-    // Inicialización al cargar
-    initSvgScroll();
   </script>

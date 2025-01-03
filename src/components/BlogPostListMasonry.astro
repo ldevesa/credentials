@@ -16,10 +16,10 @@ interface Props {
 const { posts, start = 1 } = Astro.props;
 //console.log('Astro.url.pathname', Astro.url.pathname)
 
-// la expresión regular \/blog\/\d+ verifica si "/blog/" seguido de uno o más dígitos está presente en cualquier parte de la cadena
-var regex = /\/blog\/\d+/;
-var resultregex = regex.test(Astro.url.pathname);
-console.log("resultregex PostList", resultregex);
+
+// Alternativa: Detección Basada en Entorno
+const basePath = import.meta.env.MODE === 'production' ? '../blog' : './blog';
+console.log('Current mode:', import.meta.env.MODE);
 ---
 
 <ol
@@ -41,11 +41,7 @@ console.log("resultregex PostList", resultregex);
             month: "short",
             day: "numeric",
           })}
-          href={
-            resultregex
-              ? `../blog/${post.slug.split("/")[1]}`
-              : `./blog/${post.slug.split("/")[1]}`
-          }
+          href={`${basePath}/${post.slug.split('/')[1]}`}
         />
       </li>
     ))
